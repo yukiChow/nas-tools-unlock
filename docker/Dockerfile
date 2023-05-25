@@ -1,5 +1,5 @@
 FROM alpine AS Builder
-RUN apk add --no-cache --virtual .build-deps \
+RUN apk update && apk add bash && apk add --no-cache --virtual .build-deps \
     libffi-dev \
     gcc \
     musl-dev \
