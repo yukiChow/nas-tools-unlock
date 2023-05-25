@@ -30,18 +30,7 @@ ENV S6_SERVICES_GRACETIME=30000 \
     UMASK=000 \
     WORKDIR="/nas-tools"
 WORKDIR ${WORKDIR}
-RUN mkdir ${HOME} &&
-    addgroup -S nt -g 911 &&
-    adduser -S nt -G nt -h ${HOME} -s /bin/bash -u 911 &&
-    python_ver=$(python3 -V | awk '{print $2}') &&
-    echo "${WORKDIR}/" >/usr/lib/python${python_ver%.*}/site-packages/nas-tools.pth &&
-    echo 'fs.inotify.max_user_watches=5242880' >>/etc/sysctl.conf &&
-    echo 'fs.inotify.max_user_instances=5242880' >>/etc/sysctl.conf &&
-    echo "nt ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers &&
-    git config --global pull.ff only &&
-    git clone -b master ${REPO_URL} ${WORKDIR} --depth=1 --recurse-submodule &&
-    git config --global --add safe.directory ${WORKDIR} &&
-    chmod +x /nas-tools/docker/entrypoint.sh
+RUN mkdir ${HOME} && addgroup -S nt -g 911 && adduser -S nt -G nt -h ${HOME} -s /bin/bash -u 911 && python_ver=$(python3 -V | awk '{print $2}') && echo "${WORKDIR}/" >/usr/lib/python${python_ver%.*}/site-packages/nas-tools.pth && echo 'fs.inotify.max_user_watches=5242880' >>/etc/sysctl.conf && echo 'fs.inotify.max_user_instances=5242880' >>/etc/sysctl.conf && echo "nt ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers && git config --global pull.ff only && git clone -b master ${REPO_URL} ${WORKDIR} --depth=1 --recurse-submodule && git config --global --add safe.directory ${WORKDIR} && chmod +x /nas-tools/docker/entrypoint.sh
 EXPOSE 3000
 VOLUME ["/config"]
 ENTRYPOINT [ "/init" ]
